@@ -43,11 +43,11 @@ Describe the methodology used to select and review the literature.
 - **Conclusion:**
     SAP provides a flexible solution for privacy-preserving LLM customization. Key recommendations include:
 
-    Lightweight deployment: Use frozen embedding layers for resource-constrained customers.
+  - Lightweight deployment: Use frozen embedding layers for resource-constrained customers.
 
-    Resource-rich scenarios: Split deeper layers (e.g., 6 encoder blocks) for optimal privacy-performance balance.
+  - Resource-rich scenarios: Split deeper layers (e.g., 6 encoder blocks) for optimal privacy-performance balance.
 
-    Inference-phase protection: SAP secures both training and inference, unlike prior methods like offsite-tuning.
+  - Inference-phase protection: SAP secures both training and inference, unlike prior methods like offsite-tuning.
 
     This framework advances federated fine-tuning by addressing dual privacy risks while maintaining competitive task performance.
 
