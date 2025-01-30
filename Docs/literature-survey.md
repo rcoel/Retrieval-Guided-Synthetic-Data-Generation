@@ -66,21 +66,19 @@ Describe the methodology used to select and review the literature.
 - **Key Findings:**
   - Privacy Probability Estimation:
 
-        Assumes rare linguistic items are more likely to contain private information.
-
-        Uses a pre-trained language model’s perplexity to estimate privacy probability:
-        Lower perplexity (common phrases) → lower privacy risk; higher perplexity (rare phrases) → higher risk.
-
-        Normalizes perplexity scores to derive privacy probabilities for each token sequence.
+    Assumes rare linguistic items are more likely to contain private information.
+    Uses a pre-trained language model’s perplexity to estimate privacy probability:
+    Lower perplexity (common phrases) → lower privacy risk; higher perplexity (rare phrases) → higher risk.
+    Normalizes perplexity scores to derive privacy probabilities for each token sequence.
 
   - Adaptive Noise Injection:
 
-        Scales DP noise per batch using the average privacy probability (privacy weight) of the batch:
-        Reduces noise for non-private (common) data and increases noise for private (rare) data.
+    Scales DP noise per batch using the average privacy probability (privacy weight) of the batch:
+    Reduces noise for non-private (common) data and increases noise for private (rare) data.
 
-        Adaptive-DP-Adam Algorithm:
+  - Adaptive-DP-Adam Algorithm:
 
-        Integrates adaptive noise into the Adam optimizer for efficient training of differentially private language models.
+    Integrates adaptive noise into the Adam optimizer for efficient training of differentially private language models.
 - **Eperimental Results:**
     Performance: On Wikitext-103, ADP achieves lower test loss/perplexity than DP-SGD (e.g., ADP: PPL=4,426 vs. DP-SGD: PPL=7,583 at σ=1), showing better utility.
 
