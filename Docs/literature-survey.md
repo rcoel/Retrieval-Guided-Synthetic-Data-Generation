@@ -14,7 +14,9 @@ Describe the methodology used to select and review the literature.
 
 ## Literature Review
 
-### A SPLIT-AND-PRIVATIZE FRAMEWORK FOR LARGE LANGUAGE MODEL FINE-TUNING
+### Paper 1
+
+### Title: A SPLIT-AND-PRIVATIZE FRAMEWORK FOR LARGE LANGUAGE MODEL FINE-TUNING
 
 - **Citation:** Shen, Xicong, et al. "A Split-and-Privatize Framework for Large Language Model Fine-Tuning." arXiv preprint arXiv:2312.15603 (2023).
 
@@ -48,6 +50,48 @@ Describe the methodology used to select and review the literature.
     Inference-phase protection: SAP secures both training and inference, unlike prior methods like offsite-tuning.
 
     This framework advances federated fine-tuning by addressing dual privacy risks while maintaining competitive task performance.
+
+### Paper 2
+
+### Title: Adaptive Differential Privacy for Language Model Training
+
+- **Citation:**
+    [Adaptive Differential Privacy for Language Model Training](https://aclanthology.org/2022.fl4nlp-1.3/) (Wu et al., FL4NLP 2022)
+
+    Xinwei Wu, Li Gong, and Deyi Xiong. 2022. Adaptive Differential Privacy for Language Model Training. In Proceedings of the First Workshop on Federated Learning for Natural Language Processing (FL4NLP 2022), pages 21–26, Dublin, Ireland. Association for Computational Linguistics.
+- **Author(s):** Xinwei Wu, Li Gong, and Deyi Xiong
+- **Publication Year:** 2022
+- **Summary:**
+    This paper introduces Adaptive Differential Privacy (ADP), a framework for training language models with improved utility-privacy trade-offs compared to traditional differential privacy (DP). The key innovation is dynamically adjusting DP noise levels based on the estimated privacy risk of data points, without requiring prior privacy labels.
+- **Key Findings:**
+  - Privacy Probability Estimation:
+
+        Assumes rare linguistic items are more likely to contain private information.
+
+        Uses a pre-trained language model’s perplexity to estimate privacy probability:
+        Lower perplexity (common phrases) → lower privacy risk; higher perplexity (rare phrases) → higher risk.
+
+        Normalizes perplexity scores to derive privacy probabilities for each token sequence.
+
+  - Adaptive Noise Injection:
+
+        Scales DP noise per batch using the average privacy probability (privacy weight) of the batch:
+        Reduces noise for non-private (common) data and increases noise for private (rare) data.
+
+        Adaptive-DP-Adam Algorithm:
+
+        Integrates adaptive noise into the Adam optimizer for efficient training of differentially private language models.
+- **Eperimental Results:**
+    Performance: On Wikitext-103, ADP achieves lower test loss/perplexity than DP-SGD (e.g., ADP: PPL=4,426 vs. DP-SGD: PPL=7,583 at σ=1), showing better utility.
+
+    Privacy Trade-offs: ADP slightly increases
+    ϵ(privacy budget) compared to DP-SGD but stays within acceptable bounds (e.g.,ϵ=6.35 vs. 4.22 at σ=1).
+
+    Security: ADP reduces exposure to canary attacks (e.g., "My ID is 955320") compared to non-DP models but offers slightly weaker protection than DP-SGD, reflecting a utility-privacy balance.
+
+- **Conclusion:** ADP provides a practical solution for training language models with adaptive privacy guarantees, eliminating the need for manual privacy annotations. It achieves better model performance than standard DP while maintaining robust protection against data leakage, making it suitable for real-world scenarios with unlabeled data.
+
+### Paper 3
 
 ### Title
 
