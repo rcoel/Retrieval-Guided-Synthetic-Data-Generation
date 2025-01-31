@@ -126,6 +126,31 @@ Describe the methodology used to select and review the literature.
 
 ### Paper 4
 
+### Title: Applying Directional Noise to Deep Learning
+
+- **Citation:** Faustini, Pedro, et al. "Directional Privacy for Deep Learning." arXiv preprint arXiv:2211.04686 (2022).
+- **Author(s):** Pedro Faustini, Natasha Fernandes, Shakila Tonni, Annabelle McIver, Mark Dras
+- **Publication Year:** 2023
+- **Summary:** This paper introduces directional noise as an alternative to isotropic Gaussian noise in Differentially Private Stochastic Gradient Descent (DP-SGD), aiming to preserve gradient directions and improve the utility-privacy trade-off. The authors propose using the von Mises-Fisher (VMF) distribution to perturb gradients based on angular distance, ensuring directional privacy while maintaining model performance.
+- **Key Findings:**
+  - Utility:
+
+    - VMF noise preserves higher model accuracy compared to Gaussian noise at equivalent privacy budgets (ε). For example:
+
+      - On CIFAR-10 with LeNet, VMF (ε=1) achieves 50.7% accuracy vs. Gaussian (ε=1) at 37.4%.
+
+      - For MLPs, VMF often marginally outperforms non-private baselines due to noise acting as regularization.
+
+  - Privacy Defense:
+
+    - Membership Inference Attacks (MIA): VMF reduces attack success rates (AUC) closer to random chance (50%) compared to Gaussian noise. For example, on CIFAR-10 with LeNet, VMF (ε=50) yields 50.8% AUC vs. Gaussian (ε=50) at 51.7%.
+
+    - Reconstruction Attacks: VMF introduces higher reconstruction error (MSE), making recovered data noisier. For example, on Fashion-MNIST with LeNet, VMF (ε=1) achieves 0.19 MSE vs. Gaussian (ε=1) at 0.01 MSE.
+
+- **Conclusion:** Directional noise via VMF offers a superior utility-privacy trade-off compared to Gaussian noise in DP-SGD, validated through empirical attacks and theoretical guarantees. Future work includes optimizing computational costs for high-dimensional data and extending the approach to NLP tasks. The results advocate for directional mechanisms as a promising alternative in differentially private deep learning.
+
+### Paper 5
+
 ### Title
 
 - **Citation:**
