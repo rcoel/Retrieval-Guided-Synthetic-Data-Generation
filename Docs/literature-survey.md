@@ -97,10 +97,32 @@ Describe the methodology used to select and review the literature.
 
 - **Author(s):** Nils Lukas, Ahmed Salem, Robert Sim, Shruti Tople, Lukas Wutschitz, Santiago Zanella-Béguelin
 - **Publication Year:** 2023
-- **Summary:**
+- **Summary:** This paper investigates the leakage of Personally Identifiable Information (PII) in language models (LMs) despite defenses like scrubbing and differential privacy (DP). The authors introduce three novel attacks—extraction, reconstruction, and inference—to quantify PII leakage in GPT-2 models fine-tuned on legal (ECHR), healthcare (Yelp-Health), and email (Enron) datasets.
 - **Key Findings:**
-- **Eperimental Results:**
-- **Conclusion:**
+  - Attacks:
+
+    - Extraction: Extracts PII sequences directly from LM outputs, achieving up to 23% recall on undefended models.
+
+    - Reconstruction: Uses context (prefix/suffix) to infer masked PII, outperforming prior methods by 10× in some cases.
+
+    - Inference: Infers PII from a candidate list, achieving 70% accuracy on undefended models.
+
+  - Defense Analysis:
+
+    - Differential Privacy: Reduces leakage (e.g., 3% PII extraction recall at ε=8) but does not eliminate risks.
+
+    - Scrubbing: Removes PII but degrades utility and fails when combined with DP.
+
+  - Findings:
+
+    - Larger models leak more PII, and duplication in training data increases leakage likelihood.
+
+    - DP and scrubbing trade utility for privacy; combining them offers better protection but lowers model performance.
+
+    - Membership inference attacks correlate with PII reconstruction success, highlighting overlapping vulnerabilities.
+
+- **Eperimental Results:** Current defenses are insufficient for fully preventing PII leakage. The authors advocate for adaptive scrubbing strategies informed by DP’s partial protection and emphasize the need for benchmarks to evaluate privacy risks in real-world LMs. Code is provided to reproduce experiments and assess leakage in practice.
+- **Conclusion:** The study underscores the urgency of developing defenses that balance privacy and utility while calling for standardized metrics to evaluate PII leakage in machine learning pipelines.
 
 ### Paper 4
 
