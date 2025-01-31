@@ -151,6 +151,26 @@ Describe the methodology used to select and review the literature.
 
 ### Paper 5
 
+### Title: Delving into Differentially Private Transformer
+
+- **Citation:** Ding, Youlong, et al. "Delving into Differentially Private Transformer." arXiv preprint arXiv:2405.18194 (2024).
+- **Author(s):** Youlong Ding, Xueyang Wu, Yining Meng, Yonggang Luo, Hao Wang, Weike Pan
+- **Publication Year:** 2024
+- **Summary:** This paper explores the challenges of training Transformer models with differential privacy, arguing that the problem can be "reduced" to the more understood problem of training vanilla neural nets with differential privacy. The authors propose two novel techniques, Re-Attention Mechanism and Phantom Clipping, to address the unique difficulties encountered in training DP Transformers.
+The authors propose a modular approach to address these challenges, focusing on reducing the problem of training DP Transformers to the more basic problem of training DP vanilla neural nets.
+- **Key Findings:**
+  - Attention Distraction: The attention mechanism in Transformers can be distorted by DP noise, leading to suboptimal model accuracy.
+  - Gradient Clipping: Existing techniques for efficient gradient clipping are not compatible with the standard Transformer architecture due to embedding sharing.
+- **Eperimental Results:**
+  - Re-Attention Mechanism: This mechanism mitigates attention distraction by tracking the variance of each layer's output distribution during forward propagation.
+  The Re-Attention Mechanism consistently improves training stability and convergence, especially on imbalanced datasets.
+  - Phantom Clipping: This technique enables efficient gradient clipping for Transformers with embedding sharing, generalizing existing methods.
+  Phantom Clipping significantly improves memory efficiency and training speed compared to existing methods.
+
+- **Conclusion:** The authors demonstrate that their modular approach effectively addresses the unique challenges of training DP Transformers. The proposed solutions, Re-Attention Mechanism and Phantom Clipping, contribute to advancing research in differentially private deep learning.
+
+### Paper 6
+
 ### Title
 
 - **Citation:**
@@ -160,7 +180,6 @@ Describe the methodology used to select and review the literature.
 - **Key Findings:**
 - **Eperimental Results:**
 - **Conclusion:**
-
 (Repeat the above structure for each subtopic)
 
 ## Analysis and Synthesis
