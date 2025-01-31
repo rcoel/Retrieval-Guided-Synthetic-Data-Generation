@@ -171,6 +171,24 @@ The authors propose a modular approach to address these challenges, focusing on 
 
 ### Paper 6
 
+### Title: Guiding Text-to-Text Privatization by Syntax
+
+- **Citation:** Arnold, Stefan, Dilara Yesilbas, and Sven Weinzierl. "Guiding text-to-text privatization by syntax." arXiv preprint arXiv:2306.01471 (2023).
+- **Author(s):** Stefan Arnold, Dilara Yesilbas, Sven Weinzierl
+- **Publication Year:** 2023
+- **Summary:** The paper discusses advancements in text-to-text privatization using Metric Differential Privacy, focusing on enhancing user privacy while maintaining the grammatical integrity of the text. Traditional methods of anonymizing text data often fail to preserve the syntactic roles of words, resulting in incoherent outputs primarily composed of nouns.
+- **Key Findings:**
+  - Text-to-text privatization methods based on metric differential privacy often fail to preserve the grammatical properties of words after substitution.
+  - The MADLIB mechanism, which operates on word embeddings, tends to produce surrogate texts dominated by nouns.
+  - The authors propose a modification to MADLIB that incorporates grammatical categories into the candidate selection process.
+  - This modification significantly improves the preservation of grammatical categories in surrogate texts.
+  - The authors demonstrate that their modified mechanism achieves better performance in downstream tasks while maintaining comparable privacy guarantees.
+  - The paper highlights the potential of incorporating grammatical properties into text-to-text privatization to enhance the utility of surrogate texts.
+  - The authors acknowledge the need for further research to address the information leakage associated with their modification.
+- **Conclusion:** In conclusion, the research demonstrates that integrating grammatical properties into text-to-text privatization can significantly enhance both privacy and utility. While prior studies primarily focused on geometric properties, this work highlights the importance of linguistic features in maintaining the quality of privatized texts. Despite potential risks of information leakage, the authors argue that their method represents a step forward in balancing privacy concerns with the need for coherent, contextually relevant text outputs. Future work could explore refining the candidate selection process to further mitigate privacy risks.
+
+### Paper 7
+
 ### Title
 
 - **Citation:**
