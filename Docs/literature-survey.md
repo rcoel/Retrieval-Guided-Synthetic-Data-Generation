@@ -325,7 +325,30 @@ The authors propose a modular approach to address these challenges, focusing on 
 
 ### Paper 15
 
-### Title
+### Title: PrivLM-Bench: A Multi-level Privacy Evaluation Benchmark for Language Models
+
+- **Citation:** Li, Haoran, et al. "P-bench: A multi-level privacy evaluation benchmark for language models." arXiv preprint arXiv:2311.04044 (2023).
+- **Author(s):** Haoran Li, Dadi Guo, Donghao Li, Wei Fan, Qi Hu, Xin Liu, Chunkit Chan, Duanyi Yao, Yuan Yao, Yangqiu Song
+- **Publication Year:** 2023
+- **Summary:** This paper introduces PrivLM-Bench, a benchmark designed to evaluate the privacy-utility trade-off of privacy-preserving language models (PPLMs). PrivLM-Bench addresses the limitations of existing evaluation methods that rely solely on differential privacy (DP) parameters.
+- **Key Findings:**
+  - Multi-faceted Privacy Objectives: PrivLM-Bench defines privacy objectives at both the fine-tuning and inference stages, highlighting the importance of protecting inference data privacy.
+  - Unified Pipeline: It provides a unified pipeline for evaluating PPLMs, enabling fair comparisons among different implementations.
+  - Empirical Privacy Attacks: PrivLM-Bench incorporates various privacy attacks, including data extraction attacks, membership inference attacks, and embedding-level attacks, to empirically quantify privacy leakage
+- **Eperimental Results:**
+  - Utility Degradation: DP tuning leads to utility degradation, with fine-tuning generally yielding the best results but suffering from significant accuracy drops in prompt and prefix tuning.
+  - Fine-tuning Data Privacy: DP-tuned models effectively protect fine-tuning data privacy against membership inference attacks.
+  - Inference Data Privacy: Naive DP tuning fails to protect inference data privacy, highlighting the need for additional mechanisms.
+  - Attack Effectiveness: Empirical privacy attacks are less potent than anticipated, suggesting a gap between defense mechanisms' assumed capabilities and actual attack performance.
+- **Potential Applications:**
+  - Comparison of PPLMs: PrivLM-Bench enables fair comparisons among different PPLMs.
+  - Development of New Attacks and Defenses: It provides a platform for developing new attacks and defenses.
+  - Verification of PPLM Implementations: It offers an empirical evaluation to verify the correctness of PPLM implementations.
+- **Conclusion:**
+
+### Paper 16
+
+### Title:
 
 - **Citation:**
 - **Author(s):**
