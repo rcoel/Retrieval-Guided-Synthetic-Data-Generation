@@ -307,6 +307,24 @@ The authors propose a modular approach to address these challenges, focusing on 
 
 ### Paper 14
 
+### Title: Privformer: Privacy-preserving Transformer with MPC
+
+- **Citation:** Y. Akimoto, K. Fukuchi, Y. Akimoto and J. Sakuma, "Privformer: Privacy-preserving Transformer with MPC," 2023 IEEE 8th European Symposium on Security and Privacy (EuroS&P), Delft, Netherlands, 2023, pp. 392-410, doi: 10.1109/EuroSP57164.2023.00031.
+- **Author(s):** Yoshimasa Akimoto, Kazuto Fukuchi, Youhei Akimoto, Jun Sakuma
+- **Publication Year:** 2023
+- **Summary:** This paper presents a 3-party Multi-Party Computation (MPC) protocol for secure inference of the Transformer in the honest majority setting. The protocol aims to enable the use of Transformer models deployed on cloud servers through APIs while preserving both model and user privacy.
+- **Key Findings:**
+  - Efficient MPC protocol for attention: The paper introduces ReLU attention, a variant of the attention mechanism that replaces the sigmoid function with the ReLU function, making it more MPC-friendly. This reduces the number of exponentiation calls from O(S²) to O(S), where S is the sequence length.
+  - Protocols for masked attention: Two protocols for masked attention are proposed: one with O(S²) time complexity in O(1) rounds and another with O(S) time complexity in O(S) rounds. The choice of protocol depends on the communication environment.
+  - Novel MPC protocol for square root inverse: A new protocol for square root inverse is introduced that does not leak any intermediate values, ensuring security in the honest majority setting.
+- **Eperimental Results:**
+  - The proposed protocols were implemented on top of the FALCON framework and evaluated in LAN and WAN environments.
+  - ReLU attention significantly outperforms softmax attention in terms of computation time and communication bandwidth, especially for longer sequences.
+  - Masked ReLU attentionQK achieves the best performance for most sequence lengths, while masked ReLU attentionVK is expected to be more efficient for even longer sequences.
+  - The entire Privformer protocol can infer a 64-word sentence in about 19 minutes in a LAN environment
+
+### Paper 15
+
 ### Title
 
 - **Citation:**
