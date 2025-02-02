@@ -256,6 +256,22 @@ The authors propose a modular approach to address these challenges, focusing on 
 
 ### Paper 11
 
+### Title: Privacy- and Utility-Preserving Textual Analysis via Calibrated Multivariate Perturbations
+
+- **Citation:** Feyisetan, Oluwaseyi, et al. "Privacy-and utility-preserving textual analysis via calibrated multivariate perturbations." Proceedings of the 13th international conference on web search and data mining. 2020.
+- **Author(s):** Oluwaseyi Feyisetan, Borja Balle, Thomas Drake, Tom Diethe
+- **Publication Year:** 2020
+- **Summary:** This paper presents a method for privacy-preserving text perturbation using a technique called dχ-privacy. The method aims to protect user privacy while maintaining the utility of the data for downstream machine learning tasks.
+- **Key Findings:**
+  - Scalable Mechanism: The paper proposes a scalable mechanism for text analysis that satisfies dχ-privacy. This mechanism operates on individual words, perturbing them by adding noise to their vector representations in a high-dimensional space defined by word embedding models.
+  - Privacy Proof: The paper provides a formal privacy proof demonstrating that the mechanism satisfies dχ-privacy. The privacy parameter ε controls the strength of the privacy guarantee, with larger values of ε providing stronger privacy guarantees.
+  - Privacy Calibration: The paper presents a methodology for calibrating the privacy parameter ε based on the geometric structure of the word embedding model. This involves analyzing plausible deniability statistics, such as the probability of not modifying the input word and the effective support of the output distribution.
+  - Utility Experiments: The paper conducts utility experiments on three datasets (IMDb movie reviews, Enron emails, and InsuranceQA) to demonstrate the trade-off between privacy and utility for different values of ε. The results show that the mechanism can achieve practical utility with minimal loss in performance for tasks like binary sentiment analysis.
+  - Privacy Audit Experiments: The paper compares the privacy guarantees of the proposed mechanism against two baseline query scrambling methods (Versatile and Incognito). The results demonstrate that the proposed mechanism provides significantly better privacy guarantees, preventing attacks that successfully identify perturbed queries in the baseline methods.
+- **Conclusion:** Overall, the paper presents a novel and effective approach for privacy-preserving text analysis that balances privacy guarantees with utility for downstream machine learning tasks.
+
+### Paper 12
+
 ### Title
 
 - **Citation:**
