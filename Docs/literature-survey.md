@@ -272,6 +272,23 @@ The authors propose a modular approach to address these challenges, focusing on 
 
 ### Paper 12
 
+### Title: Privacy-Preserving Parameter-Efficient Fine-Tuning for Large Language Model Services
+
+- **Citation:** Li, Yansong, Zhixing Tan, and Yang Liu. "Privacy-preserving prompt tuning for large language model services." arXiv preprint arXiv:2305.06212 (2023).
+- **Author(s):** Yansong Li, Zhixing Tan, Yang Liu
+- **Publication Year:** 2023
+- **Summary:** This paper proposes a framework called RAPT for customizing Large Language Models (LLMs) with private data while ensuring privacy. RAPT addresses the challenges of data leakage and performance degradation associated with traditional Parameter-Efficient Fine-Tuning (PEFT) methods.
+- **Key Findings of RAPT:**
+  - Local Privacy: RAPT utilizes a local privacy approach, allowing users to privatize their data locally using a text-to-text local differential privacy mechanism.
+  - Part-of-Speech Constrained Text-to-Text Privatization (PCT2T): This technique improves the grammatical coherence and semantic similarity of privatized text by restricting word substitutions within their original Part-of-Speech (POS) roles.
+  - Privatized Token Reconstruction Task: RAPT introduces a novel task that is trained jointly with the downstream task, enabling LLMs to learn better task-dependent representations and mitigate performance degradation caused by privatization.
+- **Eperimental Evaluation:**
+  - Privacy Experiments: Simulated privacy attacks, including embedding inversion, attribute inference, and NER attacks, demonstrate RAPT's effectiveness in protecting privacy.
+  - Utility Experiments: Experiments on various NLU and NLG tasks show that RAPT achieves competitive performance compared to other PEFT methods and privacy-preserving techniques, such as CAPE and DPNR.
+- **Conclusion:** RAPT offers a practical and effective solution for customizing LLM services with private data while providing robust privacy protection. The framework combines the benefits of local privacy, PCT2T, and privatized token reconstruction to achieve a favorable privacy-utility trade-off.
+
+### Paper 13
+
 ### Title
 
 - **Citation:**
