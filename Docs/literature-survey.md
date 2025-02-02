@@ -439,13 +439,20 @@ Denoising: A pre-trained denoising model is deployed on the client side to enhan
 
 ### Title
 
-- **Citation:**
-- **Author(s):**
-- **Publication Year:**
-- **Summary:**
-- **Key Findings:**
-- **Eperimental Results:**
-- **Conclusion:**
+- **Citation:** Xin Zhou, Yi Lu, Ruotian Ma, Tao Gui, Qi Zhang, and Xuanjing Huang. 2023. TextMixer: Mixing Multiple Inputs for Privacy-Preserving Inference. In Findings of the Association for Computational Linguistics: EMNLP 2023, pages 3749–3762, Singapore. Association for Computational Linguistics.
+- **Author(s):** Xin Zhou, Yi Lu, Ruotian Ma, Tao Gui, Qi Zhang, Xuanjing Huang
+- **Publication Year:** 2023
+- **Summary:** Pre-trained language models (PLMs) are often deployed as cloud services, enabling users to upload textual data and perform inference remotely. However, this practice raises privacy concerns as users' personal text may contain sensitive information. To address this issue, the authors propose TextMixer, a novel privacy-preserving inference framework that prevents plaintext leakage during the inference phase.
+- **TextMixer's key features:**
+  - Mixing: TextMixer obfuscates a user's private input by mixing it with multiple other inputs, thereby confounding potential privacy attackers.
+  - Encryption: The framework employs a Privacy Mixer module that encrypts input from three distinct dimensions: mixing, representation, and position.
+  - Multi-input Multi-output (MIMO) Network: A pre-trained MIMO network handles mixed representations and obtains multiple predictions.
+  - Privacy Demixer: Only the user can decrypt the real output among the multiple predictions using a Privacy Demixer.
+- **TextMixer's advantages:**
+  - Enhanced Privacy: TextMixer significantly surpasses existing privacy-preserving methods in both performance and privacy.
+  - Minimal Performance Degradation: The framework preserves the privacy of both the input and prediction while maintaining high task performance.
+  - Flexibility: TextMixer supports both token-level and sentence-level classification tasks and allows users to switch synthetic input generation methods without retraining.
+- **Conclusion:** TextMixer offers a promising solution for privacy-preserving inference in PLM services, effectively balancing privacy protection and task performance.
 (Repeat the above structure for each subtopic)
 
 ## Analysis and Synthesis
