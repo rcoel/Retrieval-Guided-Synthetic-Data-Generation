@@ -348,6 +348,32 @@ The authors propose a modular approach to address these challenges, focusing on 
 
 ### Paper 16
 
+### Title: Split-and-Denoise: Protect Large Language Model Inference with Local Differential Privacy
+
+- **Citation:** Mai, Peihua, et al. "Split-and-Denoise: Protect large language model inference with local differential privacy." arXiv preprint arXiv:2310.09130 (2023).
+- **Author(s):** Peihua Mai, Ran Yan, Zhe Huang, Youjia Yang, Yan Pang
+- **Publication Year:** 2023
+- **Summary:** This paper introduces Split-N-Denoise (SnD), a framework designed to protect user privacy during large language model (LLM) inference. SnD addresses the privacy concerns associated with transmitting sensitive information to servers for LLM processing.
+- **Key Findings:** Split Inference: The LLM is split, with the token embedding layer executed on the client side, minimizing computational overhead.
+Local Differential Privacy (LDP): Clients introduce noise to their token embeddings before transmitting them to the server, ensuring privacy.
+Denoising: A pre-trained denoising model is deployed on the client side to enhance the utility of the noisy embeddings received from the server.
+- **Eperimental Results:**
+  - Privacy Evaluation: SnD demonstrates strong privacy guarantees, with negligible attack success rates and low mutual information under various privacy budgets.
+  - Downstream Task Performance: SnD maintains acceptable accuracy on various downstream tasks, including sentence classification, pair similarity, and textual entailment.
+  - Comparison with Baselines: SnD consistently outperforms existing privacy-preserving LLM inference approaches, including TokenEmbPriv, Text2Text, and RAPT.
+- **Advantages of SnD:**
+  - Improved Privacy-Utility Tradeoff: SnD outperforms existing DP-based baselines by over 10% on average, offering clients a privacy-preserving solution for local privacy protection.
+  - Minimal Model Modifications: SnD requires no modifications to the LLM parameters, making it suitable for black-box API access.
+  - Effective Denoising: The client-side denoising model leverages knowledge of noise levels and raw inputs to enhance embedding utility.
+- **Conclusion:** SnD offers a promising solution for privacy-preserving LLM inference, balancing privacy protection with utility enhancement. Its effectiveness in optimizing the privacy-utility tradeoff makes it a valuable contribution to the field of trustworthy machine learning.
+
+- **Future Work:**
+  - Scalability to Larger LLMs: Extending SnD to larger LLMs requires more sophisticated noise and denoising mechanisms.
+  - Reducing User Computation Cost: Designing lightweight denoising mechanisms to minimize user computation overhead is crucial.
+  - Sequence-to-Sequence (S2S) Inference: Generalizing SnD to S2S inference models requires addressing noise amplification issues.
+
+### Paper 17
+
 ### Title:
 
 - **Citation:**
