@@ -414,15 +414,26 @@ Denoising: A pre-trained denoising model is deployed on the client side to enhan
 
 ### Paper 19
 
-### Title
+### Title: TextHide: Tackling Data Privacy in Language Understanding Tasks
 
-- **Citation:**
-- **Author(s):**
-- **Publication Year:**
-- **Summary:**
+- **Citation:** Huang, Yangsibo, et al. "TextHide: Tackling data privacy in language understanding tasks." Findings of the Association for Computational Linguistics: EMNLP 2020. 2020.
+- **Author(s):** Yangsibo Huang, Zhao Song, Danqi Chen, Kai Li, Sanjeev Arora
+- **Publication Year:** 2020
+- **Summary:** This paper introduces TextHide, a novel approach for privacy-preserving natural language processing (NLP) training in a federated learning setting. TextHide addresses the challenge of protecting training data privacy without sacrificing training speed or accuracy.
 - **Key Findings:**
+  - Simple Encryption: TextHide employs a simple encryption step using one-time secret keys to hide the representations of text data.
+  - Minimal Impact: The encryption step is efficient and only slightly affects task performance.
+  - Compatibility with BERT: TextHide seamlessly integrates with the popular framework of fine-tuning pre-trained language models like BERT.
+  - Security Argument: TextHide's security relies on the computational intractability of a mathematical problem, k-VECTOR SUBSET SUM.
 - **Eperimental Results:**
-- **Conclusion:**
+  - Accuracy: TextHide achieves comparable accuracy to the baseline BERT model, with an average accuracy reduction of only 1.9%.
+  - Gradient Security: TextHide effectively defends against gradient-matching attacks, which aim to recover private inputs from shared gradients.
+  - Representation Security: TextHide effectively hides the original representations of text data, making it difficult for attackers to reconstruct them.
+- **Comparison to Existing Methods:**
+  - Differential Privacy: While effective, differential privacy methods often trade off data utility for privacy preservation.
+  - Cryptographic Methods: Homomorphic encryption and secure multi-party computation offer strong privacy guarantees but significantly slow down computations.
+  - InstaHide: TextHide builds upon the InstaHide framework, which was originally designed for computer vision tasks.
+- **Conclusion:** TextHide presents a practical and effective approach for privacy-preserving NLP training. Its simplicity, minimal impact on performance, and strong security argument make it a promising solution for addressing privacy concerns in NLP applications.
 
 ### Paper 20
 
