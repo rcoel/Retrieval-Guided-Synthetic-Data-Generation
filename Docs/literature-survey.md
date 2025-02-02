@@ -189,6 +189,22 @@ The authors propose a modular approach to address these challenges, focusing on 
 
 ### Paper 7
 
+### Title: Large-Scale Differentially Private BERT
+
+- **Citation:** Anil, Rohan, et al. "Large-scale differentially private BERT." arXiv preprint arXiv:2108.01624 (2021).
+- **Author(s):** Rohan Anil, Badih Ghazi, Vineet Gupta, Ravi Kumar, Pasin Manurangsi
+- **Publication Year:** 2021
+- **Summary:** This paper explores the pretraining of BERT-Large using Differentially Private Stochastic Gradient Descent (DP-SGD). The authors address the challenges of training large language models with differential privacy, which is crucial for protecting user data privacy.
+- **Key Findings:**
+  - Negative Interaction of Naive DP-SGD with Scale-Invariant Layers: The authors highlight the importance of a large weight decay parameter in the Adam optimizer to handle scale-invariant layers, which are common in BERT-Large. This insight helps in tuning hyper-parameters effectively to achieve higher accuracy.
+
+  - Mega-Batches Improve Accuracy: They demonstrate that scaling up batch sizes to around 2 million examples significantly improves the utility of DP-SGD for BERT-Large. This approach achieves a masked language model (MLM) accuracy of 60.5% at a batch size of 2 million, compared to the non-private BERT models' accuracy of around 70%.
+
+  - Increasing Batch Size Schedule: The authors propose an increasing batch size schedule that improves training efficiency while maintaining accuracy. This schedule is motivated by the observation that the gradient signal-to-noise ratio (gradient-SNR) decreases over time, and increasing the batch size helps mitigate this issue.
+- **Conclusion:** Overall, the paper establishes a high-accuracy baseline for DP BERT-Large pretraining and provides valuable insights into the practical challenges and solutions for training large language models with differential privacy.
+
+### Paper 8
+
 ### Title
 
 - **Citation:**
