@@ -205,6 +205,18 @@ The authors propose a modular approach to address these challenges, focusing on 
 
 ### Paper 8
 
+### Title: Large Scale Private Learning via Low-rank Reparametrization
+
+- **Citation:** Yu, Da, et al. "Large scale private learning via low-rank reparametrization." International Conference on Machine Learning. PMLR, 2021.
+- **Author(s):** Da Yu, Huishuai Zhang, Wei Chen, Jian Yin, Tie-Yan Liu
+- **Publication Year:** 2021
+- **Summary:** The paper introduces a novel method for private learning, focusing on Reparametrized Gradient Perturbation (RGP) to enhance differential privacy while minimizing memory usage.
+- **Key Findings:** RGP employs a reparametrization of weight matrices, utilizing gradient-carrier matrices to streamline gradient calculations and making use of historical gradients for optimization.
+- **Eperimental Results:** The proposed method demonstrates significant performance improvements on benchmark tests, achieving notable accuracy while effectively managing privacy budgets and surpassing existing baseline methods.
+- **Conclusion:** RGP successfully balances privacy with model performance. Future directions include exploring more applications and optimizing the method for varied models, thus lowering the risks associated with privacy without sacrificing effectiveness.
+
+### Paper 9
+
 ### Title
 
 - **Citation:**
