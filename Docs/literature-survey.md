@@ -289,6 +289,24 @@ The authors propose a modular approach to address these challenges, focusing on 
 
 ### Paper 13
 
+### Title: Privacy-Preserving Text Classification on BERT Embeddings with Homomorphic Encryption
+
+- **Citation:** Lee, Garam, et al. "Privacy-preserving text classification on BERT embeddings with homomorphic encryption." arXiv preprint arXiv:2210.02574 (2022).
+- **Author(s):** Garam Lee, Minsoo Kim, Jai Hyun Park, Seung-won Hwang, Jung Hee Cheon
+- **Publication Year:** 2022
+- **Summary:** This paper proposes a method for privacy-preserving text classification using homomorphic encryption (HE) and BERT embeddings. The method addresses the privacy concerns associated with traditional text embedding models, which can leak sensitive information about the text.
+- **Key Findings:**
+  - BERT Embedding-based Method: The proposed method utilizes pre-trained BERT embeddings, which are semantically rich and significantly outperform previous methods like PrivFT, which relied on fastText embeddings.
+  - Efficient GPU Implementation: The paper presents an efficient GPU implementation of the CKKS encryption scheme, which is well-suited for real-valued data like BERT embeddings. This implementation improves computation speed and allows for higher security levels compared to previous methods.
+  - Encrypted Logistic Regression: The method employs an encrypted logistic regression model as the downstream classifier, enabling training and inference on encrypted data.
+- **Advantages:**
+  - Privacy Protection: The use of HE ensures that all computations are performed on encrypted data, preventing any leakage of sensitive information.
+  - Utility Preservation: The method achieves high accuracy on downstream text classification tasks, demonstrating that HE can preserve the utility of BERT embeddings.
+  - Efficiency: The GPU implementation significantly improves training efficiency compared to previous methods.
+- **Conclusion:** The proposed method provides a practical and efficient solution for privacy-preserving text classification, leveraging the power of BERT embeddings and the security of homomorphic encryption. While further research is needed to address the computational cost of HE-based models, this work demonstrates the potential of HE for protecting privacy in NLP applications.
+
+### Paper 14
+
 ### Title
 
 - **Citation:**
