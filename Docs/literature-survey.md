@@ -217,6 +217,23 @@ The authors propose a modular approach to address these challenges, focusing on 
 
 ### Paper 9
 
+### Title: Learning and Evaluating a Differentially Private Pre-trained Language Model
+
+- **Citation:** Shlomo Hoory, Amir Feder, Avichai Tendler, Sofia Erell, Alon Peled-Cohen, Itay Laish, Hootan Nakhost, Uri Stemmer, Ayelet Benjamini, Avinatan Hassidim, and Yossi Matias. 2021. Learning and Evaluating a Differentially Private Pre-trained Language Model. In Findings of the Association for Computational Linguistics: EMNLP 2021, pages 1178–1189, Punta Cana, Dominican Republic. Association for Computational Linguistics.
+- **Author(s):** Shlomo Hoory, Amir Feder, Avichai Tendler, Sofia Erell, Alon Peled-Cohen, Itay Laish, Hootan Nakhost, Uri Stemmer, Ayelet Benjamini, Avinatan Hassidim, Yossi Matias
+- **Publication Year:** 2021
+- **Summary:** This paper addresses the challenge of training large language models (LLMs) like BERT on sensitive data while preserving user privacy. The authors propose a novel approach to train a differentially private BERT model on medical data, specifically clinical notes, with a strong privacy guarantee of  = 1.1.
+- **Key Findings:**
+  - Differentially Private WordPiece Algorithm: The authors introduce a differentially private version of the WordPiece algorithm, which allows for the creation of domain-specific vocabularies while maintaining privacy.
+  - Training a Differentially Private BERT Model: The paper presents a method for training a differentially private BERT model using the DP-SGD algorithm, overcoming challenges related to large batch sizes and parallelism.
+  - Privacy Evaluation: The authors employ a secret sharer membership test to demonstrate that the trained DP-BERT model does not memorize private information.
+- **Eperimental Results:**
+  - The DP-BERT model achieves comparable performance to non-private BERT models on entity extraction tasks from clinical notes, demonstrating that privacy-preserving training does not significantly degrade model utility.
+  - The secret sharer test confirms that the DP-BERT model effectively prevents information leakage, ensuring that private information is not memorized.
+- **Conclusion:** This work provides a practical solution for training LLMs on sensitive data while maintaining privacy guarantees. The proposed approach offers a balance between model performance and privacy, paving the way for the development of more secure and responsible NLP applications.
+
+### Paper 10
+
 ### Title
 
 - **Citation:**
