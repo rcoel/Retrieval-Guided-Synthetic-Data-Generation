@@ -234,6 +234,28 @@ The authors propose a modular approach to address these challenges, focusing on 
 
 ### Paper 10
 
+### Title: Natural Language Understanding with Privacy-Preserving BERT
+
+- **Citation:** Qu, Chen, et al. "Natural language understanding with privacy-preserving bert." Proceedings of the 30th ACM International Conference on Information & Knowledge Management. 2021.
+- **Author(s):** Chen Qu, Weize Kong, Liu Yang, Mingyang Zhang, Michael Bendersky, Marc Najork
+- **Publication Year:** 2021
+- **Summary:** This paper addresses the challenge of preserving privacy in Natural Language Understanding (NLU) applications using pretrained Language Models (LMs) like BERT. It focuses on the Local Privacy setting, where users privatize their data before sending it to service providers.
+- **Key Findings:**
+  - Investigates the privacy and utility implications of applying 𝑑𝜒-privacy to BERT fine-tuning.
+  - Proposes privacy-adaptive LM pretraining methods to improve BERT's utility on privatized text.
+  - Quantifies the level of privacy preservation and provides guidance on privacy configuration.
+- **Methods:**
+  - Token Representation Privatization: Perturbs token embeddings with noise drawn from a specific distribution.
+  - Text-to-Text Privatization: Replaces words in the original text with semantically similar words using nearest neighbor search in the embedding space.
+  - Privacy-Adaptive Pretraining: Trains BERT on large-scale public text corpora that have been privatized using different variants of the Masked Language Model (MLM) loss.
+- **Conclusion:**
+  - Text-to-text privatization outperforms token representation privatization in fine-tuning due to the effectiveness of nearest neighbor search.
+  - Privacy-adaptive pretraining significantly improves BERT's performance on privatized text, making it more robust and effective.
+  - Denoising MLM, which predicts the original tokens, is the most effective privacy-adaptive pretraining method.
+  - Token representation privatization outperforms text-to-text privatization when noise is large with privacy-adaptive pretraining.
+
+### Paper 11
+
 ### Title
 
 - **Citation:**
