@@ -437,7 +437,7 @@ Denoising: A pre-trained denoising model is deployed on the client side to enhan
 
 ### Paper 20
 
-### Title
+### Title: TextMixer: Mixing Multiple Inputs for Privacy-Preserving Inference
 
 - **Citation:** Xin Zhou, Yi Lu, Ruotian Ma, Tao Gui, Qi Zhang, and Xuanjing Huang. 2023. TextMixer: Mixing Multiple Inputs for Privacy-Preserving Inference. In Findings of the Association for Computational Linguistics: EMNLP 2023, pages 3749–3762, Singapore. Association for Computational Linguistics.
 - **Author(s):** Xin Zhou, Yi Lu, Ruotian Ma, Tao Gui, Qi Zhang, Xuanjing Huang
