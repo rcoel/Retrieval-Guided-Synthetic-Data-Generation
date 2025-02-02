@@ -374,7 +374,59 @@ Denoising: A pre-trained denoising model is deployed on the client side to enhan
 
 ### Paper 17
 
-### Title:
+### Title: Synthetic Text Generation with Differential Privacy: A Simple and Practical Recipe
+
+- **Citation:** Yue, Xiang, et al. "Synthetic text generation with differential privacy: A simple and practical recipe." arXiv preprint arXiv:2210.14348 (2022).
+- **Author(s):** Xiang Yue, Huseyin A. Inan, Xuechen Li, Girish Kumar, Julia McAnallen, Hoda Shajari, Huan Sun, David Levitan, Robert Sim
+- **Publication Year:** 2022
+- **Summary:** This paper presents a method for generating synthetic customer feedback data with differential privacy guarantees. The authors propose fine-tuning a pre-trained language model (LM) with differential privacy (DP) to generate synthetic text that preserves the statistical properties of the original data while protecting individual privacy.
+- **Key Findings:**
+  - High Utility: The synthetic data generated using this method achieves comparable performance to non-private synthetic data and even outperforms models trained directly on the original data with DP in some cases.
+  - Strong Privacy Protection: The DP-trained LM effectively prevents the leakage of private information, even when sensitive information is repeated multiple times in the training data.
+  - Length Truncation Effect: The synthetic data generated with DP tends to be shorter than the original data, which is a limitation of the method.
+  - Real-World Application: The authors demonstrate the feasibility of their approach using a private customer feedback dataset obtained from Microsoft.
+- **Advantages of the Method:**
+  - Flexibility: The method can be used to generate synthetic data for a variety of downstream tasks without incurring additional privacy loss.
+  - Dataset Debugging: Synthetic data can be shared more freely, making it easier to debug datasets.
+  - Data Retention: Synthetic data can be retained for longer periods under certain policies, as it does not directly contain private information.
+- **Limitations:**
+  - Tail of the Distribution: DP limits the model's ability to learn the tail of the data distribution, potentially missing valuable information conveyed in outliers.
+  - Class Imbalance: DP disproportionately affects classes with different sample sizes, particularly impacting the learning of small-size classes.
+  - Correlation: DP guarantees are most effective when individual samples have low or no correlation.
+
+### Paper 18
+
+### Title: TextFusion: Privacy-Preserving Pre-trained Model Inference via Token Fusion
+
+- **Citation:** Xin Zhou, Jinzhu Lu, Tao Gui, Ruotian Ma, Zichu Fei, Yuran Wang, Yong Ding, Yibo Cheung, Qi Zhang, and Xuanjing Huang. 2022. TextFusion: Privacy-Preserving Pre-trained Model Inference via Token Fusion. In Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing, pages 8360–8371, Abu Dhabi, United Arab Emirates. Association for Computational Linguistics.
+- **Author(s):** Xin Zhou, Jinzhu Lu, Tao Gui, Ruotian Ma, Zichu Fei, Yuran Wang, Yong Ding, Yibo Cheung, Qi Zhang, Xuanjing Huang
+- **Publication Year:** 2022
+- **Summary:** This paper proposes TextFusion, a novel method for preserving inference privacy when using pre-trained language models (PLMs) as cloud services.
+- **Key Findings:**
+  - Privacy Guarantee: TextFusion effectively protects inference privacy by breaking the one-to-one relationship between token representations and raw words.
+  - Performance Preservation: The method achieves comparable performance to standard fine-tuning across various classification tasks.
+  - Adaptability: TextFusion is applicable to both sentence and token classification tasks.
+- **Eperimental Results:**
+  - extFusion outperforms existing privacy-preserving methods in both performance and privacy metrics.
+  - Ablation studies demonstrate the effectiveness of both token fusion and misleading training.
+  - Case studies illustrate the effectiveness of TextFusion in preventing privacy leakage.
+- **Conclusion:** TextFusion offers a promising solution for privacy-preserving inference with PLMs, enabling users to benefit from powerful models while protecting their sensitive data.
+
+### Paper 19
+
+### Title
+
+- **Citation:**
+- **Author(s):**
+- **Publication Year:**
+- **Summary:**
+- **Key Findings:**
+- **Eperimental Results:**
+- **Conclusion:**
+
+### Paper 20
+
+### Title
 
 - **Citation:**
 - **Author(s):**
