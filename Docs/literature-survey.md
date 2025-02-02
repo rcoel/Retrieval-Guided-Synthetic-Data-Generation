@@ -453,7 +453,6 @@ Denoising: A pre-trained denoising model is deployed on the client side to enhan
   - Minimal Performance Degradation: The framework preserves the privacy of both the input and prediction while maintaining high task performance.
   - Flexibility: TextMixer supports both token-level and sentence-level classification tasks and allows users to switch synthetic input generation methods without retraining.
 - **Conclusion:** TextMixer offers a promising solution for privacy-preserving inference in PLM services, effectively balancing privacy protection and task performance.
-(Repeat the above structure for each subtopic)
 
 ## Analysis and Synthesis
 
