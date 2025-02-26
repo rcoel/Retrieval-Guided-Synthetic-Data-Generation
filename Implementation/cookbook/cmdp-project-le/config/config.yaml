@@ -1,4 +1,4 @@
-codebook_size: 256
+codebook_size: 28
 embedding_dim: 768
 k_mixing_factor: 4
 dp_noise_scale: 0.1
