@@ -28,6 +28,7 @@ class Codebook:
     def add_dp_noise(self, noise_scale):
         if self.codebook_vectors is None:
             raise ValueError("Codebook not trained yet. Call train_codebook first.")
-        laplace = laplace_dist.Laplace(torch.tensor([0.0]), torch.tensor([noise_scale]))
+
+        laplace = laplace_dist.Laplace(torch.tensor(0.0), torch.tensor(noise_scale))
         noise = laplace.sample(self.codebook_vectors.shape)
         self.codebook_vectors += noise

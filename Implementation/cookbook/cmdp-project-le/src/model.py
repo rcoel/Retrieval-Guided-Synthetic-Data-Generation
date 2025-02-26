@@ -6,7 +6,7 @@ class CMDPModelForClassification(nn.Module):
         self.cmdp_encoder = cmdp_encoder
         self.classifier = nn.Linear(cmdp_encoder.codebook.embedding_dim, num_labels)
 
-    def forward(self, input_ids, attention_mask, labels=None):
+    def forward(self, input_ids, attention_mask, token_type_ids=None, labels=None):
         cmdp_representations = self.cmdp_encoder(input_ids, attention_mask)
         pooled_output = cmdp_representations[:, 0, :]
         logits = self.classifier(pooled_output)
