@@ -38,7 +38,7 @@ class CMDPEncoder(nn.Module):
         mixed_codebook_vectors = torch.stack(mixed_codebook_vectors)
 
         if self.dp_noise_scale > 0:
-            laplace = laplace_dist.Laplace(torch.tensor([0.0]), torch.tensor([self.dp_noise_scale]))
+            laplace = laplace_dist.Laplace(torch.tensor(0.0), torch.tensor(self.dp_noise_scale))
             noise = laplace.sample(mixed_codebook_vectors.shape)
             mixed_codebook_vectors += noise
 
