@@ -25,7 +25,7 @@ def train(model, train_dataloader, optimizer, num_epochs, device):
 
 if __name__ == "__main__":
     # Hyperparameters
-    codebook_size = 256
+    codebook_size = 28
     embedding_dim = 768
     k_mixing_factor = 4
     dp_noise_scale = 0.1
@@ -46,8 +46,8 @@ if __name__ == "__main__":
     all_train_embeddings = []
     with torch.no_grad():
         for batch in train_dataloader:
-            input_ids = batch[0]
-            attention_mask = batch[1]
+            input_ids = batch['input_ids']
+            attention_mask = batch['attention_mask']
             batch_embeddings = bert_model_for_codebook(input_ids, attention_mask=attention_mask).last_hidden_state
             all_train_embeddings.append(batch_embeddings.view(-1, embedding_dim))
     all_train_embeddings = torch.cat(all_train_embeddings, dim=0).numpy()
@@ -63,3 +63,8 @@ if __name__ == "__main__":
     # Training
     optimizer = optim.AdamW(model.parameters(), lr=learning_rate)
     train(model, train_dataloader, optimizer, num_epochs, device)
+
+# Save the trained model and codebook
+torch.save(model.state_dict(), 'cmdp_model.pth')
+torch.save(codebook.codebook_vectors, 'codebook_vectors.pth')
+
