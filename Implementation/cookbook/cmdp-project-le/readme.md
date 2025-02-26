@@ -15,6 +15,7 @@ This project implements the CMDP (Codebook-Mediated Differential Privacy) method
 ## Setup
 
 1. Install the required dependencies:
+
     ```bash
     pip install -r requirements.txt
     ```
@@ -22,6 +23,7 @@ This project implements the CMDP (Codebook-Mediated Differential Privacy) method
 2. Place your training data in the `data/` directory.
 
 3. Run the training script:
+
     ```bash
     python main.py
     ```
