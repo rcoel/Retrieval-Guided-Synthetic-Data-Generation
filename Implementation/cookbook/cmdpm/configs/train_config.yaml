@@ -1,0 +1,21 @@
+codebook:
+  size: 256
+  embedding_dim: 768
+
+training:
+  learning_rate: 0.00002  # 2e-5 as float
+  batch_size: 32
+  epochs: 5
+  max_length: 128
+
+model:
+  k_mixing: 4
+  num_labels: 2
+
+data:
+  train_path: "data/train.csv"
+  val_split: 0.2
+
+logging:
+  log_dir: "logs/"
+  save_dir: "models/"

@@ -1,0 +1,8 @@
+torch>=2.0.0
+transformers>=4.30.0
+scikit-learn>=1.0.0
+numpy>=1.21.0
+tqdm>=4.0.0
+pyyaml>=6.0.0
+datasets>=2.0.0  # Optional, for dataset handling
+opacus>=1.0.0    # Optional, for differential privacy
