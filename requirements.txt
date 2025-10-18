@@ -1,0 +1,14 @@
+torch
+transformers
+datasets
+accelerate
+bitsandbytes
+peft
+sentence-transformers
+faiss-gpu # or faiss-cpu for non-gpu devices
+scikit-learn
+nltk
+evaluate
+pandas
+tqdm
+numpy
