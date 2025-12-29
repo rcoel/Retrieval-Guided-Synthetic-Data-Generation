@@ -5,7 +5,7 @@ accelerate
 bitsandbytes
 peft
 sentence-transformers
-faiss-gpu # or faiss-cpu for non-gpu devices
+faiss-cpu
 scikit-learn
 nltk
 evaluate
