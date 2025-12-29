@@ -1,6 +1,6 @@
 import os
 import pandas as pd
-from src import config, data_loader, utils
+from src import config, dataloader, utils
 from src.pipeline import indexing, training, generation
 from src.evaluation import downstream_task, quality, privacy
 
@@ -17,8 +17,8 @@ def main():
     print("="*80 + "\n")
 
     # --- 1. Load Data ---
-    private_dataset = data_loader.load_private_dataset(config.PRIVATE_DATA_NAME, config.PRIVATE_DATA_SUBSET)
-    public_corpus_df = data_loader.load_public_corpus(config.PUBLIC_CORPUS_PATH)
+    private_dataset = dataloader.load_private_dataset(config.PRIVATE_DATA_NAME, config.PRIVATE_DATA_SUBSET)
+    public_corpus_df = dataloader.load_public_corpus(config.PUBLIC_CORPUS_PATH)
     
     public_passages = indexing.chunk_text(
         public_corpus_df['text'].tolist(),

@@ -25,6 +25,6 @@ def setup_nltk():
     """Downloads NLTK data if not present."""
     try:
         nltk.data.find('tokenizers/punkt')
-    except nltk.downloader.DownloadError:
+    except LookupError:
         print("Downloading NLTK's 'punkt' tokenizer...")
         nltk.download('punkt')

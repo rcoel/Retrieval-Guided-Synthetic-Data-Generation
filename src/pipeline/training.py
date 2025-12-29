@@ -31,17 +31,20 @@ class LoRAFineTuner:
     def __init__(self, base_model_name):
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         
-        # Quantization config for memory efficiency
-        bnb_config = BitsAndBytesConfig(
-            load_in_4bit=True,
-            bnb_4bit_quant_type="nf4",
-            bnb_4bit_compute_dtype=torch.bfloat16,
-            bnb_4bit_use_double_quant=True,
-        )
+        if torch.cuda.is_available():
+            bnb_config = BitsAndBytesConfig(
+                load_in_4bit=True,
+                bnb_4bit_quant_type="nf4",
+                bnb_4bit_compute_dtype=torch.bfloat16,
+                bnb_4bit_use_double_quant=True,
+            )
+            quantization_config = bnb_config
+        else:
+            quantization_config = None
 
         self.model = AutoModelForCausalLM.from_pretrained(
             base_model_name,
-            quantization_config=bnb_config,
+            quantization_config=quantization_config,
             device_map="auto", # Automatically uses available GPUs
             trust_remote_code=True
         )
