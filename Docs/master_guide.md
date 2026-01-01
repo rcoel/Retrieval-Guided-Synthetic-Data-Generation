@@ -1,106 +1,108 @@
-# Master Guide: Adaptive Retrieval-Guided Synthetic Data Generation
+# Master Guide: Agentic Retrieval-Guided Synthetic Data Generation
 
- This document serves as the comprehensive guide to the **Adaptive RAG** system for synthetic data generation. It details the system's architecture, including the novel feedback-guided self-correction mechanism, and provides step-by-step instructions for usage.
+This guide serves as the definitive manual for the **Enhanced Adaptive RAG System**. This project has been upgraded from a standard RAG pipeline to a **Closed-Loop Agentic Framework** designed to generate high-fidelity synthetic data while strictly preserving privacy.
 
-## 1. Project Overview
+---
 
-The goal of this project is to generate high-fidelity synthetic data from private datasets (like GLUE/SST2). It uses **Retrieval-Augmented Generation (RAG)** to ensure data utility while adapting a Large Language Model (LLM) to the specific domain.
+## 1. Core Architecture & Uniqueness
 
-**Key Features:**
+Unlike standard tools (e.g., RAGAS, LangChain RAG) that rely on simple "generation-evaluation" steps, this system implements three novel layers of intelligence to solve the Privacy-Utility tradeoff.
 
-- **Privacy-Preserving**: Mitigates risk by rewriting private examples using public context.
-- **Adaptive Self-Correction (Novelty)**: Automatically detects and fixes low-quality or privacy-violating samples during generation.
-- **High Efficiency**: Uses batched processing for retrieval and generation to maximize GPU throughput.
+### 🧠 Pillar I: Agentic Critique (The "Coach")
 
-## 2. System Architecture
+**Problem**: Standard systems just "retry" with higher randomness (temperature) when privacy checks fail. This is inefficient.
+**Our Solution**: Failing samples are sent to a **Critic Agent**.
 
-The pipeline consists of four main stages, orchestrated by `src/main.py`.
+1. **Analyze**: The Critic reviews *why* the sample failed (e.g., "Retained specific location 'Mount Sinai Hospital'").
+2. **Instruct**: It generates a natural language instruction (e.g., "Replace hospital names with generic facility types").
+3. **Refine**: The Generator retries using this explicit instruction, solving the problem intelligently.
 
-### Stage 1: Indexing
+### 🛡️ Pillar II: Red Team Filtering (The "Hacker")
 
-- **Goal**: Create a searchable knowledge base from public data.
-- **Process**:
-    1. Loads a public corpus (CSV).
-    2. Chunks text into passages.
-    3. Generates embeddings using `sentence-transformers/all-MiniLM-L6-v2`.
-    4. Builds a **FAISS** index for fast similarity search.
+**Problem**: Passing an N-Gram overlap check doesn't guarantee privacy (e.g., "John Doe" -> "Doe, John" has 0% overlap but huge leakage).
+**Our Solution**: A **Privacy Attacker (Red Team)** runs as a text classifier on the final output.
 
-### Stage 2: Fine-Tuning
+- It proactively attempts to extract PII or infer the original identity.
+- If the Attacker succeeds, the sample is **rejected immediately**, ensuring robustness against model inversion attacks.
 
-- **Goal**: Adapt the LLM to the domain of the private data.
-- **Process**:
-    1. Retrieves relevant public context for each private training example.
-    2. Fine-tunes the base model (`Qwen/Qwen2-0.5B-Instruct`) using **LoRA (Low-Rank Adaptation)**.
-    3. This teaches the model the *style* and *structure* of the desired data.
+### 👻 Pillar III: Noisy Retrieval (DP-Inspired)
 
-### Stage 3: Adaptive Generation (The Core Innovation)
+**Problem**: If you retrieve public context that is *too* similar to the private data, you risk reconstruction.
+**Our Solution**: **Laplacian Noise Injection**.
 
-- **Goal**: Generate synthetic samples that satisfy both Privacy and Utility constraints.
-- **Mechanism**: A **Feedback-Guided Loop** runs for every batch of data.
-    1. **Generate**: The model enables a candidate response.
-    2. **Evaluate**:
-        - **Privacy Check**: Calculates N-gram overlap with the original private text. (Target: `< 50%`)
-        - **Utility Check**: Calculates Semantic Similarity with the original text. (Target: `> 0.7`)
-    3. **Self-Correct**:
-        - **If Privacy Fails**: The system *increases temperature* (randomness) to encourage diverse rewriting and retries.
-        - **If Utility Fails**: The system *decreases temperature* to focus the model and retries.
-    4. **Finalize**: The best candidate within `MAX_RETRIES` is saved.
+- Before querying the database, we add calibrated noise (`PRIVACY_EPSILON`) to the query embeddings.
+- This creates a mathematical "fuzziness" that prevents exact pattern matching, adding a layer of plausible deniability to the retrieval process.
 
-### Stage 4: Evaluation
+---
 
-- **Goal**: Measure the success of the synthetic data.
-- **Metrics**:
-  - **Downstream Utility**: Trains a BERT classifier on synthetic data and tests on real data.
-  - **Quality**: diversity (Self-BLEU) and richness (TTR).
-  - **Privacy**: Exact Match Ratio and N-gram Overlap.
+## 2. Impact on Workflows
 
-## 3. Setup & Installation
+| Component | Old Logic | **New Agentic Logic** | Benefit |
+| :--- | :--- | :--- | :--- |
+| **Indexing** | Exact Match | **Noisy/Fuzzy Match** | Prevents Context Reconstruction |
+| **Generation** | Retry Loop | **Critic -> Refiner Loop** | Higher efficacy in fixing leaks |
+| **Evaluation** | Quality Metrics | **Adversarial Attack** | Robustness against inference |
 
-**Prerequisites:**
+---
 
-- Python 3.9+
-- (Optional) NVIDIA GPU for acceleration
+## 3. Configuration Guide
 
-**Installation:**
+All improvements are controlled via `src/config.py`.
 
-1. **Install Dependencies**:
+### Privacy Tuning
 
-    ```bash
-    pip install -r requirements.txt
-    ```
+```python
+# --- Advanced Privacy Features ---
 
-    *(Note: On Mac, ensures `faiss-cpu` is used. On Linux/Windows with GPU, install `faiss-gpu`)*.
+# Controls "Fuzziness" of retrieval. 
+# 0.0 = Exact Match (High Utility, Low Privacy)
+# 0.1 - 0.5 = Balanced (Recommended)
+# > 1.0 = High Noise (High Privacy, Low Utility)
+PRIVACY_EPSILON = 0.1   
 
-2. **Download NLTK Data**:
-    The script handles this, but you may need to run:
+# Enable/Disable the Adversarial Attacker
+ENABLE_RED_TEAM = True  
 
-    ```bash
-    python -m nltk.downloader punkt
-    ```
-
-## 4. Usage
-
-Run the entire pipeline with a single command:
-
-```bash
-python main.py
+# Standard thresholds
+MAX_NGRAM_OVERLAP = 0.5 # Stricter = Lower overlap allowed
 ```
 
-### Configuration (`src/config.py`)
+---
 
-You can control the behavior of the Adaptive RAG system by modifying `src/config.py`:
+## 4. Running the Pipeline
 
-| Parameter | Default | Description |
-| :--- | :--- | :--- |
-| `MAX_RETRIES` | `3` | Maximum attempts to self-correct a sample. |
-| `MAX_NGRAM_OVERLAP` | `0.5` | Maximum allowed 5-gram overlap (Privacy threshold). |
-| `MIN_SEMANTIC_SIM` | `0.7` | Minimum required semantic similarity (Utility threshold). |
-| `BATCH_SIZE_GENERATION` | `8` | Number of samples to process in parallel. |
-| `MAX_TRAIN_SAMPLES` | `4` | Number of samples for training (Set to `None` for full run). |
+### Prerequisites
+
+- Python 3.9+
+- `pip install -r requirements.txt`
+- (Optional) GPU for faster Red Teaming and LoRA training.
+
+### Execution
+
+Run the full end-to-end pipeline:
+
+```bash
+python3 src/main.py
+# OR
+python3 -m src.main
+```
+
+### What to Expect in Logs
+
+You will see the Agentic system in action:
+
+1. **"Loading Red Team Attacker..."**: The adversarial model initializes.
+2. **"High Overlap (0.85)... CRITIC STEP"**: The Agent detects a leak and generates a critique.
+3. **"Privacy Leak Detected by Red Team"**: The generic check passed, but the Red Team caught a subtle leak. The sample is discarded/flagged.
+
+---
 
 ## 5. Directory Structure
 
-- `src/main.py`: Entry point.
-- `src/pipeline/generation.py`: Contains the **Adaptive Logic**.
-- `src/evaluation/`: Metrics for Privacy and Quality.
-- `tests/test_novelty.py`: Unit test verifying the self-correction logic.
+- **`src/pipeline/generation.py`**: Contains the **Critic-Refiner** loop logic.
+- **`src/pipeline/indexing.py`**: Contains the **Noisy Retrieval** logic.
+- **`src/evaluation/red_team.py`**: Contains the **PrivacyAttacker** class.
+- **`src/evaluation/privacy.py`**: Standard N-gram and Exact Match metrics.
+
+---
+*Built for the Advanced Agentic Coding Project.*
