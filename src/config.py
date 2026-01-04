@@ -22,7 +22,7 @@ CLASSIFIER_MODEL = "bert-base-uncased"
 # --- Indexing Parameters ---
 CHUNK_SIZE = 256
 CHUNK_OVERLAP = 128
-EMBEDDING_DIM = 768 # Dimension for all-mpnet-base-v2
+EMBEDDING_DIM = 384 # Dimension for all-MiniLM-L6-v2
 
 # --- Fine-Tuning (PEFT) Parameters ---
 LORA_R = 8
@@ -48,3 +48,7 @@ MAX_NGRAM_OVERLAP = 0.5 # Max allowed 5-gram overlap ratio (Privacy)
 MIN_SEMANTIC_SIM = 0.7  # Min required semantic similarity (Utility)
 MAX_RETRIES = 3         # Max attempts to self-correct
 BATCH_SIZE_GENERATION = 8 # Batch size for generation loop
+
+# --- Advanced Privacy Features ---
+PRIVACY_EPSILON = 0.1   # Magnitude of noise injected into embeddings (Differential Privacy style)
+ENABLE_RED_TEAM = True  # Enable adversarial filtering step
