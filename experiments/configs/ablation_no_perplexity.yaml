@@ -1,0 +1,12 @@
+# Ablation: No Perplexity Gate (no coherence filtering)
+dataset: sst2
+seed: 42
+max_train_samples: null
+max_generation_samples: null
+
+enable_dp_accounting: true
+enable_perplexity_gate: false
+enable_red_team: true
+temp_schedule: cosine
+generation_temp: 0.8
+max_retries: 3

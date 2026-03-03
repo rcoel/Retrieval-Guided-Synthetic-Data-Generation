@@ -1,42 +1,24 @@
-# Implementation Plan - Project Differentiation Strategy
+# Differentiation Strategy — What Makes PrivaSyn Novel
 
-## Goal Description
-Transform the current "Adaptive RAG" from a heuristic-based loop (temperature tuning) into a robust **Agentic Privacy Framework**. This aims to solve the "Utility-Privacy Tradeoff" more effectively than standard open-source tools by using active LLM critique and adversarial testing.
+## vs. Standard RAG Pipelines (LangChain, RAGAS, LlamaIndex)
 
-## User Review Required
-> [!IMPORTANT]
-> **Architectural Change**: This moves the generation logic from a simple loop to a multi-step Agentic workflow (Generator -> Critic -> Refiner). This will increase generation time per sample but significantly improve quality and privacy guarantees.
+| Feature | Standard RAG | **PrivaSyn** |
+|---------|-------------|-------------------|
+| Generation feedback | None or simple retry | **CoT Critic → structured JSON → targeted fix** |
+| Privacy check | Post-hoc N-gram overlap | **3-layer: N-gram + Red Team + DP noise** |
+| Privacy guarantee | None | **Formal Rényi DP accounting (Theorem 1)** |
+| Coherence check | None | **Perplexity gate** |
+| Temperature strategy | Fixed or random | **Adaptive cosine annealing by failure type** |
+| Privacy evaluation | Basic overlap stats | **Shadow model MIA (5-feature attack classifier)** |
+| Multi-dataset | Manual setup | **Auto registry (SST-2, AG News, IMDB)** |
+| Experiments | Ad hoc | **YAML configs, CLI runner, ablation suite** |
+| Statistical rigor | None | **Bootstrap CI, paired t-test, Cohen's d** |
 
-## Proposed Changes
+## 6 Novel Contributions for Paper
 
-### Core Logic Upgrade: Agentic Self-Correction
-Replace the numeric feedback loop (Temperature +/-) with semantic feedback.
-#### [MODIFY] [generation.py](file:///Users/veerasagar/Retrieval-Guided-Synthetic-Data-Generation/src/pipeline/generation.py)
-- **Current**: `if fail: temp += 0.2`
-- **New**: 
-    1. **Generator**: Produce draft.
-    2. **Critic**: If `fail`, generate strict instructions (e.g., "You leaked the date. Remove it.").
-    3. **Refiner**: Re-generate using `Original Prompt + Critic Feedback`.
-
-### New Capability: Adversarial "Red Team" Filter
-Most RAG tools check *overlap*. We will add a check for *information leakage*.
-#### [NEW] [red_team.py](file:///Users/veerasagar/Retrieval-Guided-Synthetic-Data-Generation/src/evaluation/red_team.py)
-- Implement a `PrivacyAttacker` class.
-- **Logic**: Prompt an LLM to try and guess the private entity or label from the synthetic text.
-- Integrated into `generation.py` as a final gate.
-
-### Enhancement: Noisy Retrieval
-Add a layer of privacy at the retrieval step.
-#### [MODIFY] [indexing.py](file:///Users/veerasagar/Retrieval-Guided-Synthetic-Data-Generation/src/pipeline/indexing.py)
-- Add a `privacy_epsilon` parameter.
-- Inject Gaussian noise into query embeddings before searching the FAISS index to prevent exact pattern matching of private data against the public corpus.
-
-## Verification Plan
-
-### Automated Tests
-- **Privacy Attack Simulation**: Run `red_team.py` on known leaks to verify it catches them.
-- **Feedback Loop Test**: Mock a failure case and ensure the `Critic` generates prompts that actually lead to a fixed output.
-
-### Manual Verification
-- **Before/After Comparison**: Generate 10 samples with the old logic vs. new Agentic logic.
-- **Review Artifact**: Create a `comparison.md` showing how Agentic Refinement fixed specific privacy leaks that simple temperature tuning missed.
+1. **Rényi DP Accounting** — Provable privacy budget with formal theorem
+2. **Chain-of-Thought Critic** — LLM-based structured feedback (not just temperature tuning)
+3. **Red Team Adversarial Filter** — Catches semantic leaks N-gram checks miss
+4. **Perplexity-Gated Coherence** — Filters hallucinated/incoherent outputs
+5. **Adaptive Temperature Scheduling** — Cosine annealing based on failure type
+6. **Shadow Model MIA Evaluation** — Publication-standard privacy evaluation

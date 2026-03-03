@@ -12,3 +12,5 @@ evaluate
 pandas
 tqdm
 numpy
+pyyaml
+scipy

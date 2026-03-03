@@ -1,0 +1,13 @@
+# Vanilla Baseline — No novelties (standard RAG generation)
+dataset: sst2
+seed: 42
+max_train_samples: null
+max_generation_samples: null
+
+# All novelties disabled
+enable_dp_accounting: false
+enable_perplexity_gate: false
+enable_red_team: false
+temp_schedule: fixed
+generation_temp: 0.8
+max_retries: 0
