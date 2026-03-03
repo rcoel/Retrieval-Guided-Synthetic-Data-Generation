@@ -1,28 +1,37 @@
-# PrivaSyn — Privacy-Preserving Synthetic Data Generation
+# PrivaSyn - A Multi-Agent Framework for Privacy-Preserving Synthetic Data Generation with Formal Differential Privacy Guarantees
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Python](https://img.shields.io/badge/python-3.9+-green.svg)
-![Tests](https://img.shields.io/badge/tests-58%20passing-brightgreen)
-![Stage](https://img.shields.io/badge/stage-Research%20Paper-blueviolet)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Python 3.9+](https://img.shields.io/badge/Python-3.9+-3776AB.svg?logo=python&logoColor=white)](https://www.python.org/)
+[![Tests](https://img.shields.io/badge/Tests-58%20Passing-success.svg)](tests/)
+[![Stage](https://img.shields.io/badge/Stage-Research%20Paper-blueviolet.svg)]()
 
-## Overview
+## Abstract
 
-**PrivaSyn** is a multi-agent framework for privacy-preserving synthetic data generation with formal differential privacy guarantees using retrieval-augmented self-correction. The system uses a multi-agent architecture (Generator, Critic, Red Team) with a closed-loop self-correction workflow that balances the **Privacy × Utility × Coherence** quality triangle.
+**PrivaSyn** addresses the critical challenge of generating high-fidelity synthetic data while providing provable privacy guarantees. Our framework introduces a *multi-agent architecture* — comprising a Generator, Chain-of-Thought Critic, and Red Team Attacker — orchestrated through a closed-loop self-correction workflow. By integrating Renyi Differential Privacy accounting with retrieval-augmented generation, PrivaSyn balances three competing objectives: **privacy**, **utility**, and **coherence**.
 
-### Novel Contributions
+> **Key Insight:** Rather than relying on simple temperature-based retry loops, PrivaSyn uses structured LLM-generated feedback to *intelligently* fix privacy leaks — achieving both stronger guarantees and higher data quality.
+
+---
+
+## Novel Contributions
 
 | # | Contribution | Description |
-|---|-------------|-------------|
-| 1 | **Rényi DP Accounting** | Formal privacy budget tracking with provable guarantees (Theorem 1) |
-| 2 | **Chain-of-Thought Critic** | Structured JSON feedback for intelligent self-correction |
-| 3 | **Red Team Filtering** | Adversarial privacy auditing — catches leaks N-gram checks miss |
+|:-:|:-------------|:------------|
+| 1 | **Renyi DP Accounting** | Formal privacy budget tracking with provable guarantees ([Theorem 1](Docs/formal_dp_guarantee.md)) |
+| 2 | **Chain-of-Thought Critic** | Structured JSON feedback for targeted self-correction |
+| 3 | **Red Team Filtering** | Adversarial privacy auditing that catches leaks N-gram checks miss |
 | 4 | **Perplexity Gate** | Coherence filtering via perplexity thresholding |
-| 5 | **Adaptive Temperature** | Cosine-annealed temperature scheduling based on failure type |
+| 5 | **Adaptive Temperature** | Cosine-annealed scheduling based on failure type |
 | 6 | **Shadow Model MIA** | 5-feature attack classifier for rigorous privacy evaluation |
 
 ---
 
-## Quick Start
+## Getting Started
+
+### Prerequisites
+
+- Python 3.9+
+- GPU recommended (validated on NVIDIA T4)
 
 ### Installation
 
@@ -32,182 +41,199 @@ cd Retrieval-Guided-Synthetic-Data-Generation
 pip install -r requirements.txt
 ```
 
-### Run the Pipeline
+### Quick Run
 
 ```bash
-# Full pipeline (loads config from src/config.py)
+# Full pipeline with default config
 python3 -m src.main
 
-# Or use the experiment runner with YAML configs
+# Experiment runner with YAML config
 python run_experiment.py --config experiments/configs/full_pipeline.yaml --dataset sst2
-```
 
-### Run Experiments
-
-```bash
-# Single experiment
-python run_experiment.py --config experiments/configs/full_pipeline.yaml --dataset sst2 --seed 42
-
-# Full ablation study (runs all 7 configs)
-python run_experiment.py --ablation all --dataset ag_news --seed 42
-
-# Dry run (tiny samples for quick testing)
-python run_experiment.py --config experiments/configs/full_pipeline.yaml --dry-run
-
-# Generate publication-ready results tables
-python run_experiment.py --results-table --results-dir experiments/results/
-
-# List available datasets
-python run_experiment.py --list-datasets
-```
-
-### Run Tests
-
-```bash
-python3 -m pytest tests/ -v   # 58 tests
+# Run test suite (58 tests)
+python3 -m pytest tests/ -v
 ```
 
 ---
 
 ## Architecture
 
-The pipeline uses a **6-stage agentic workflow**:
+PrivaSyn implements a **6-stage agentic workflow**:
 
-```
-1. Data Loading        → Dataset registry (SST-2, AG News, IMDB)
-2. Semantic Indexing   → FAISS index with calibrated DP noise on queries
-3. LoRA Fine-Tuning    → Domain adaptation with PEFT
-4. Agentic Generation  → Generator → Quality Gate → Critic → Red Team → Accept/Retry
-5. Evaluation          → Quality + Privacy + MIA + DP Audit + Downstream
-6. Results             → LaTeX/Markdown tables with bootstrap CI
+```text
+Data Loading ──> Semantic Indexing ──> LoRA Fine-Tuning ──> Agentic Generation ──> Evaluation ──> Results
+     |                  |                    |                      |                   |            |
+  Registry         FAISS + DP           PEFT Adapter        Generator -> Gate      Quality +     LaTeX +
+  (3 datasets)     Noise on queries                         -> Critic -> Red Team   Privacy +    Markdown
+                                                            -> Accept/Retry         MIA + DP     Tables
 ```
 
-See [Docs/architecture_flow.md](Docs/architecture_flow.md) for the full Mermaid diagram.
+> See the full Mermaid diagrams in [Docs/architecture_flow.md](Docs/architecture_flow.md).
 
 ---
 
-## Project Structure
+## Experiment Framework
 
-```
-├── run_experiment.py              # CLI experiment runner
-├── requirements.txt               # Dependencies
-├── experiments/
-│   ├── configs/                   # YAML experiment configs
-│   │   ├── full_pipeline.yaml     # All novelties ON
-│   │   ├── baseline_vanilla.yaml  # All novelties OFF
-│   │   ├── ablation_no_dp.yaml
-│   │   ├── ablation_no_critic.yaml
-│   │   ├── ablation_no_perplexity.yaml
-│   │   ├── ablation_no_redteam.yaml
-│   │   └── ablation_fixed_temp.yaml
-│   └── results/                   # Saved experiment results (JSON)
-├── src/
-│   ├── main.py                    # Pipeline orchestrator
-│   ├── config.py                  # PipelineConfig dataclass
-│   ├── dataset_registry.py        # Multi-dataset registry
-│   ├── dataloader.py              # Data loading with validation
-│   ├── model_loader.py            # Shared model factory (quantization)
-│   ├── logger.py                  # Centralized logging
-│   ├── privacy_budget.py          # Rényi DP accountant
-│   ├── utils.py                   # Seeds, device, I/O helpers
-│   ├── pipeline/
-│   │   ├── indexing.py            # FAISS + noisy retrieval
-│   │   ├── training.py            # LoRA fine-tuning
-│   │   ├── generation.py          # Agentic generation loop
-│   │   ├── critic.py              # CoT Critic agent
-│   │   └── prompts.py             # All prompt templates
-│   └── evaluation/
-│       ├── quality.py             # Semantic similarity, TTR, Self-BLEU
-│       ├── privacy.py             # N-gram overlap, exact match
-│       ├── downstream_task.py     # BERT classifier utility test
-│       ├── red_team.py            # Adversarial privacy attacker
-│       ├── membership_inference.py # Simple MIA (similarity-based)
-│       ├── shadow_model_mia.py    # Full shadow model MIA
-│       ├── statistical_tests.py   # Bootstrap CI, t-tests, Cohen's d
-│       └── results_table.py       # LaTeX + Markdown table generator
-├── tests/                         # 58 unit tests
-│   ├── test_config.py
-│   ├── test_dataloader.py
-│   ├── test_generation.py
-│   ├── test_prompts.py
-│   ├── test_privacy_budget.py
-│   ├── test_utils.py
-│   ├── test_differentiation.py
-│   └── test_novelty.py
-└── Docs/
-    ├── architecture_flow.md       # System diagrams (Mermaid)
-    ├── formal_dp_guarantee.md     # Theorem 1 + proofs
-    ├── master_guide.md            # Developer guide
-    ├── Datasets.md                # Supported datasets
-    ├── research/
-    │   ├── paper_summaries.md     # 20 related papers
-    │   └── paper_links.md         # Reference links
-    └── literature-survey.md       # Full literature survey
+PrivaSyn includes a complete experiment suite with **7 YAML configurations** for reproducible evaluation:
+
+```bash
+# Full ablation study (all 7 configs)
+python run_experiment.py --ablation all --dataset sst2 --seed 42
+
+# Individual configs
+python run_experiment.py --config experiments/configs/full_pipeline.yaml --dataset sst2
+python run_experiment.py --config experiments/configs/baseline_vanilla.yaml --dataset sst2
+
+# Dry run (4 samples for quick testing)
+python run_experiment.py --config experiments/configs/full_pipeline.yaml --dry-run
+
+# Generate publication-ready tables
+python run_experiment.py --results-table --results-dir experiments/results/
+
+# List available datasets
+python run_experiment.py --list-datasets
 ```
 
----
+### Ablation Configurations
 
-## Configuration
-
-### YAML Config (Experiments)
-
-```yaml
-# experiments/configs/full_pipeline.yaml
-dataset: sst2
-enable_dp_accounting: true
-enable_perplexity_gate: true
-enable_red_team: true
-temp_schedule: cosine       # cosine | linear | fixed
-generation_temp: 0.8
-max_retries: 3
-```
-
-### Python Config (Default)
-
-All defaults in `src/config.py` — validated `@dataclass` with `__post_init__` checks:
-
-```python
-from src.config import PipelineConfig
-cfg = PipelineConfig(PRIVACY_EPSILON=0.05, TEMP_SCHEDULE="linear")
-print(cfg.to_dict())  # Serializable
-```
+| Config | DP | Critic | Perplexity | Red Team | Temp | Retries |
+|:-------|:--:|:------:|:----------:|:--------:|:----:|:-------:|
+| `full_pipeline` | Yes | Yes | Yes | Yes | Cosine | 3 |
+| `baseline_vanilla` | -- | -- | -- | -- | Fixed | 0 |
+| `ablation_no_dp` | -- | Yes | Yes | Yes | Cosine | 3 |
+| `ablation_no_critic` | Yes | -- | Yes | Yes | Cosine | 0 |
+| `ablation_no_perplexity` | Yes | Yes | -- | Yes | Cosine | 3 |
+| `ablation_no_redteam` | Yes | Yes | Yes | -- | Cosine | 3 |
+| `ablation_fixed_temp` | Yes | Yes | Yes | Yes | Fixed | 3 |
 
 ---
 
 ## Supported Datasets
 
 | Key | Dataset | Task | Labels | Source |
-|-----|---------|------|--------|--------|
+|:----|:--------|:-----|:------:|:-------|
 | `sst2` | Stanford Sentiment Treebank v2 | Sentiment | 2 | `glue/sst2` |
 | `ag_news` | AG News | Topic Classification | 4 | `fancyzhx/ag_news` |
 | `imdb` | IMDB Reviews | Sentiment | 2 | `stanfordnlp/imdb` |
 
-Auto column mapping and public corpus generation handled by `dataset_registry.py`.
+Datasets are auto-downloaded with column mapping handled by `dataset_registry.py`.
 
 ---
 
 ## Evaluation Metrics
 
-| Category | Metric | Direction | Description |
-|----------|--------|-----------|-------------|
-| **Quality** | Semantic Similarity | ↑ Higher | Meaning preservation |
-| **Quality** | TTR | ↑ Higher | Lexical richness |
-| **Quality** | Self-BLEU | ↓ Lower | Diversity (less mode collapse) |
-| **Privacy** | Exact Match | ↓ Lower | Verbatim copy rate |
-| **Privacy** | 5-gram Overlap | ↓ Lower | N-gram leakage |
-| **Privacy** | MIA ASR | ↓ Lower | Membership inference attack success |
-| **Privacy** | MIA AUC-ROC | ↓ Lower | Attacker discrimination ability |
-| **Privacy** | TPR@1%FPR | ↓ Lower | True positive rate at low false positive |
-| **Utility** | Downstream Accuracy | ↑ Higher | Classifier trained on synthetic data |
-| **DP** | ε spent | — | Cumulative privacy budget consumed |
+| Category | Metric | Goal | Description |
+|:---------|:-------|:----:|:------------|
+| **Quality** | Semantic Similarity | Higher | Meaning preservation |
+| **Quality** | Type-Token Ratio | Higher | Lexical richness |
+| **Quality** | Self-BLEU | Lower | Output diversity |
+| **Privacy** | Exact Match Rate | Lower | Verbatim copy detection |
+| **Privacy** | 5-gram Overlap | Lower | N-gram leakage |
+| **Privacy** | MIA Attack Success Rate | Lower | Membership inference resistance |
+| **Privacy** | MIA AUC-ROC | Lower | Attacker discrimination ability |
+| **Privacy** | TPR @ 1% FPR | Lower | True positive rate at low false positive |
+| **Utility** | Downstream Accuracy | Higher | Classifier trained on synthetic data |
+| **DP** | Epsilon Spent | -- | Cumulative privacy budget consumed |
+
+---
+
+## Project Structure
+
+```text
+privasyn/
+├── run_experiment.py                  # CLI experiment runner
+├── requirements.txt                   # Dependencies
+│
+├── experiments/
+│   ├── configs/                       # 7 YAML experiment configs
+│   └── results/                       # Saved results (JSON)
+│
+├── src/
+│   ├── config.py                      # Validated @dataclass config
+│   ├── dataset_registry.py            # Multi-dataset registry
+│   ├── dataloader.py                  # Data loading + validation
+│   ├── model_loader.py                # Shared quantized model factory
+│   ├── logger.py                      # Centralized logging
+│   ├── privacy_budget.py              # Renyi DP accountant
+│   ├── utils.py                       # Seeds, device, I/O
+│   ├── main.py                        # Pipeline orchestrator
+│   │
+│   ├── pipeline/
+│   │   ├── prompts.py                 # All prompt templates
+│   │   ├── indexing.py                # FAISS + noisy retrieval
+│   │   ├── training.py                # LoRA fine-tuning
+│   │   ├── critic.py                  # CoT Critic agent
+│   │   └── generation.py              # Agentic generation loop
+│   │
+│   └── evaluation/
+│       ├── quality.py                 # Similarity, TTR, Self-BLEU
+│       ├── privacy.py                 # N-gram overlap, exact match
+│       ├── red_team.py                # Adversarial attacker
+│       ├── membership_inference.py    # Simple MIA
+│       ├── shadow_model_mia.py        # Shadow model MIA
+│       ├── downstream_task.py         # BERT classifier
+│       ├── statistical_tests.py       # Bootstrap CI, t-tests, Cohen's d
+│       └── results_table.py           # LaTeX + Markdown tables
+│
+├── tests/                             # 58 unit tests
+├── notebooks/
+│   └── PrivaSyn.ipynb                 # Complete Colab notebook
+│
+└── Docs/
+    ├── architecture_flow.md           # System diagrams
+    ├── formal_dp_guarantee.md         # Theorem 1 + proofs
+    ├── master_guide.md                # Developer reference
+    ├── commands.md                    # All CLI commands
+    ├── Datasets.md                    # Dataset documentation
+    └── research/                      # Related papers
+```
+
+---
+
+## Documentation
+
+| Document | Description |
+|:---------|:------------|
+| [Architecture Flow](Docs/architecture_flow.md) | System diagrams (Mermaid) |
+| [Formal DP Guarantee](Docs/formal_dp_guarantee.md) | Theorem 1 (RDP Composition) + proof sketches |
+| [Master Guide](Docs/master_guide.md) | Developer reference + configuration guide |
+| [Commands](Docs/commands.md) | Complete CLI command reference |
+| [Datasets](Docs/Datasets.md) | Supported datasets + how to add new ones |
+| [Paper Summaries](Docs/research/paper_summaries.md) | 20 related research papers |
+
+---
+
+## Running on Google Colab
+
+Upload `notebooks/PrivaSyn.ipynb` to Google Colab with a T4 GPU runtime. The notebook includes all source code and experiment cells.
+
+```text
+Section 1: Setup             → Clone + install
+Section 2-6: Source Code      → All 18 modules
+Section 7: Tests              → 58 unit tests
+Section 8: Experiments        → Ablation, multi-seed, results tables
+```
+
+---
+
+## Citation
+
+If you use PrivaSyn in your research, please cite:
+
+```bibtex
+@article{privasyn2026,
+  title={PrivaSyn: A Multi-Agent Framework for Privacy-Preserving Synthetic Data Generation with Formal Differential Privacy Guarantees},
+  year={2026}
+}
+```
 
 ---
 
 ## References
 
-1. Mironov, I. "Rényi Differential Privacy." CSF 2017
-2. Shokri et al. "Membership Inference Attacks Against ML Models." IEEE S&P 2017
-3. Hu et al. "LoRA: Low-Rank Adaptation of Large Language Models." ICLR 2022
-4. Lewis et al. "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks." NeurIPS 2020
+1. Mironov, I. *Renyi Differential Privacy.* CSF 2017
+2. Shokri et al. *Membership Inference Attacks Against ML Models.* IEEE S&P 2017
+3. Hu et al. *LoRA: Low-Rank Adaptation of Large Language Models.* ICLR 2022
+4. Lewis et al. *Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks.* NeurIPS 2020
 
 ---
