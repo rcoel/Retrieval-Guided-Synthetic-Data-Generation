@@ -1,6 +1,6 @@
 import unittest
 from src.evaluation.red_team import PrivacyAttacker
-from src.pipeline.generation import create_prompt, create_critic_prompt
+from src.pipeline.prompts import create_prompt, create_critic_prompt
 from src import config
 
 class TestDifferentiation(unittest.TestCase):

@@ -1,108 +1,158 @@
-# Master Guide: Agentic Retrieval-Guided Synthetic Data Generation
+# Master Guide: PrivaSyn
 
-This guide serves as the definitive manual for the **Enhanced Adaptive RAG System**. This project has been upgraded from a standard RAG pipeline to a **Closed-Loop Agentic Framework** designed to generate high-fidelity synthetic data while strictly preserving privacy.
+## 1. Overview
 
----
+**PrivaSyn** is a multi-agent framework for privacy-preserving synthetic data generation with formal differential privacy guarantees using retrieval-augmented self-correction. It generates synthetic data that is semantically faithful to the original while provably preventing data leakage.
 
-## 1. Core Architecture & Uniqueness
+### Three Pillars
 
-Unlike standard tools (e.g., RAGAS, LangChain RAG) that rely on simple "generation-evaluation" steps, this system implements three novel layers of intelligence to solve the Privacy-Utility tradeoff.
-
-### 🧠 Pillar I: Agentic Critique (The "Coach")
-
-**Problem**: Standard systems just "retry" with higher randomness (temperature) when privacy checks fail. This is inefficient.
-**Our Solution**: Failing samples are sent to a **Critic Agent**.
-
-1. **Analyze**: The Critic reviews *why* the sample failed (e.g., "Retained specific location 'Mount Sinai Hospital'").
-2. **Instruct**: It generates a natural language instruction (e.g., "Replace hospital names with generic facility types").
-3. **Refine**: The Generator retries using this explicit instruction, solving the problem intelligently.
-
-### 🛡️ Pillar II: Red Team Filtering (The "Hacker")
-
-**Problem**: Passing an N-Gram overlap check doesn't guarantee privacy (e.g., "John Doe" -> "Doe, John" has 0% overlap but huge leakage).
-**Our Solution**: A **Privacy Attacker (Red Team)** runs as a text classifier on the final output.
-
-- It proactively attempts to extract PII or infer the original identity.
-- If the Attacker succeeds, the sample is **rejected immediately**, ensuring robustness against model inversion attacks.
-
-### 👻 Pillar III: Noisy Retrieval (DP-Inspired)
-
-**Problem**: If you retrieve public context that is *too* similar to the private data, you risk reconstruction.
-**Our Solution**: **Laplacian Noise Injection**.
-
-- Before querying the database, we add calibrated noise (`PRIVACY_EPSILON`) to the query embeddings.
-- This creates a mathematical "fuzziness" that prevents exact pattern matching, adding a layer of plausible deniability to the retrieval process.
+| Pillar | Agent | How It Works |
+|--------|-------|-------------|
+| **Intelligent Critique** | CoT Critic | Analyzes failures → produces structured JSON feedback → guides regeneration |
+| **Adversarial Auditing** | Red Team | Attempts to extract PII → rejects samples the Critic missed |
+| **Formal Privacy** | DP Accountant | Tracks Rényi DP budget → halts generation when budget exhausted |
 
 ---
 
-## 2. Impact on Workflows
+## 2. Running the System
 
-| Component | Old Logic | **New Agentic Logic** | Benefit |
-| :--- | :--- | :--- | :--- |
-| **Indexing** | Exact Match | **Noisy/Fuzzy Match** | Prevents Context Reconstruction |
-| **Generation** | Retry Loop | **Critic -> Refiner Loop** | Higher efficacy in fixing leaks |
-| **Evaluation** | Quality Metrics | **Adversarial Attack** | Robustness against inference |
-
----
-
-## 3. Configuration Guide
-
-All improvements are controlled via `src/config.py`.
-
-### Privacy Tuning
-
-```python
-# --- Advanced Privacy Features ---
-
-# Controls "Fuzziness" of retrieval. 
-# 0.0 = Exact Match (High Utility, Low Privacy)
-# 0.1 - 0.5 = Balanced (Recommended)
-# > 1.0 = High Noise (High Privacy, Low Utility)
-PRIVACY_EPSILON = 0.1   
-
-# Enable/Disable the Adversarial Attacker
-ENABLE_RED_TEAM = True  
-
-# Standard thresholds
-MAX_NGRAM_OVERLAP = 0.5 # Stricter = Lower overlap allowed
-```
-
----
-
-## 4. Running the Pipeline
-
-### Prerequisites
-
-- Python 3.9+
-- `pip install -r requirements.txt`
-- (Optional) GPU for faster Red Teaming and LoRA training.
-
-### Execution
-
-Run the full end-to-end pipeline:
+### Option A: Simple Pipeline
 
 ```bash
-python3 src/main.py
-# OR
 python3 -m src.main
 ```
 
-### What to Expect in Logs
+Runs the full pipeline using defaults from `src/config.py`.
 
-You will see the Agentic system in action:
+### Option B: Experiment Runner (Recommended)
 
-1. **"Loading Red Team Attacker..."**: The adversarial model initializes.
-2. **"High Overlap (0.85)... CRITIC STEP"**: The Agent detects a leak and generates a critique.
-3. **"Privacy Leak Detected by Red Team"**: The generic check passed, but the Red Team caught a subtle leak. The sample is discarded/flagged.
+```bash
+# Single experiment with YAML config
+python run_experiment.py --config experiments/configs/full_pipeline.yaml --dataset sst2
+
+# Full ablation study
+python run_experiment.py --ablation all --dataset sst2 --seed 42
+
+# Quick testing
+python run_experiment.py --config experiments/configs/full_pipeline.yaml --dry-run
+
+# Generate LaTeX + Markdown results tables
+python run_experiment.py --results-table
+```
+
+### Option C: Run Tests
+
+```bash
+python3 -m pytest tests/ -v    # 58 tests
+```
 
 ---
 
-## 5. Directory Structure
+## 3. Configuration
 
-- **`src/pipeline/generation.py`**: Contains the **Critic-Refiner** loop logic.
-- **`src/pipeline/indexing.py`**: Contains the **Noisy Retrieval** logic.
-- **`src/evaluation/red_team.py`**: Contains the **PrivacyAttacker** class.
-- **`src/evaluation/privacy.py`**: Standard N-gram and Exact Match metrics.
+### YAML Configs (for experiments)
+
+Located in `experiments/configs/`. Each file controls which novelties are enabled:
+
+| Config | DP | Perplexity | Red Team | Adaptive Temp | Retries |
+|--------|----|-----------|----------|--------------|---------|
+| `full_pipeline.yaml` | ✅ | ✅ | ✅ | cosine | 3 |
+| `baseline_vanilla.yaml` | ❌ | ❌ | ❌ | fixed | 0 |
+| `ablation_no_dp.yaml` | ❌ | ✅ | ✅ | cosine | 3 |
+| `ablation_no_critic.yaml` | ✅ | ✅ | ❌ | cosine | 0 |
+| `ablation_no_perplexity.yaml` | ✅ | ❌ | ✅ | cosine | 3 |
+| `ablation_no_redteam.yaml` | ✅ | ✅ | ❌ | cosine | 3 |
+| `ablation_fixed_temp.yaml` | ✅ | ✅ | ✅ | fixed | 3 |
+
+### Python Config (defaults)
+
+`src/config.py` — a validated `@dataclass` with `__post_init__` checks:
+
+```python
+# Key parameters
+PRIVACY_EPSILON = 0.1           # Per-query DP noise (lower = more private)
+TOTAL_PRIVACY_BUDGET = 10.0     # Max ε before halting
+ENABLE_DP_ACCOUNTING = True     # Track Rényi DP budget
+ENABLE_PERPLEXITY_GATE = True   # Filter incoherent samples
+ENABLE_RED_TEAM = True          # Adversarial privacy audit
+MAX_RETRIES = 3                 # Self-correction attempts
+TEMP_SCHEDULE = "cosine"        # cosine | linear | fixed
+SEED = 42                       # Reproducibility
+```
 
 ---
-*Built for the Advanced Agentic Coding Project.*
+
+## 4. Module Reference
+
+### Infrastructure
+
+| Module | Description |
+|--------|-------------|
+| `config.py` | Validated `@dataclass` with `to_dict()`, computed properties |
+| `model_loader.py` | Shared factory for quantized models (eliminates duplication) |
+| `logger.py` | `logging` module with console + file handlers |
+| `dataset_registry.py` | Multi-dataset registry with auto column mapping |
+| `privacy_budget.py` | Rényi DP accountant + noise calibration |
+
+### Pipeline
+
+| Module | Description |
+|--------|-------------|
+| `indexing.py` | FAISS index with calibrated DP noise on queries |
+| `training.py` | LoRA fine-tuning with PEFT |
+| `generation.py` | Agentic loop: generate → gate → critique → retry |
+| `critic.py` | CoT Critic agent (structured JSON feedback) |
+| `prompts.py` | All prompt templates (single source of truth) |
+
+### Evaluation
+
+| Module | Description |
+|--------|-------------|
+| `quality.py` | Semantic similarity, TTR, Self-BLEU |
+| `privacy.py` | N-gram overlap, exact match |
+| `red_team.py` | Adversarial privacy attacker |
+| `membership_inference.py` | Simple similarity-based MIA |
+| `shadow_model_mia.py` | Full shadow-model MIA (5-feature classifier) |
+| `statistical_tests.py` | Bootstrap CI, paired t-test, Cohen's d |
+| `results_table.py` | LaTeX + Markdown table generation |
+| `downstream_task.py` | BERT classifier utility evaluation |
+
+---
+
+## 5. What to Expect in Logs
+
+```
+STAGE 1: Loading Data
+  Loading dataset: sst2 (Stanford Sentiment Treebank)
+  Loaded 67,349 samples, 2 labels
+
+STAGE 4: Enhanced Agentic Generation
+  [Batch 1/84] Processing 8 samples...
+  [Sample 3] Privacy violation (overlap=0.72) → Critic feedback → Retry 1
+  [Sample 3] CoT Critic: "Replace hospital name 'Mount Sinai' with generic term"
+  [Sample 3] Retry passed ✅ (overlap=0.18, sim=0.83, ppl=24.5)
+  [Sample 5] Red Team caught semantic leak → Rejected
+  DP Budget: ε_spent=2.34, remaining=7.66
+
+STAGE 5: Comprehensive Evaluation
+  Semantic Similarity: 0.8142
+  Self-BLEU: 0.3215
+  MIA ASR: 52.3% (✅ near random chance)
+  Shadow MIA AUC: 0.5145
+```
+
+---
+
+## 6. Adding a New Dataset
+
+1. Add entry to `DATASET_REGISTRY` in `src/dataset_registry.py`
+2. Create YAML configs in `experiments/configs/`
+3. Run: `python run_experiment.py --config your_config.yaml --dataset your_key`
+
+---
+
+## 7. References
+
+- [Formal DP Guarantee](formal_dp_guarantee.md) — Theorem 1 + proof sketches
+- [Architecture Flow](architecture_flow.md) — System diagrams
+- [Research Papers](research/paper_summaries.md) — 20 related papers
